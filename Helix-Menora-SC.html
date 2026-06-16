@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helix-ITSM · Steering Committee · מנורה מבטחים</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+:root {
+  --dark:     #3d4157;
+  --darker:   #2e3148;
+  --yellow:   #f5c800;
+  --yalpha:   rgba(245,200,0,0.12);
+  --white:    #ffffff;
+  --offwhite: #f7f7f8;
+  --text:     #1c1c2e;
+  --muted:    #5a5a72;
+  --border:   #e4e4ed;
+  --stripe:   8px;
+  --green:    #2d7d46;
+  --green-bg: #eaf4ee;
+  --red:      #b03a2e;
+  --red-bg:   #fdecea;
+  --orange:   #e67e22;
+}
+
+body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
+
+#deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.38s cubic-bezier(.4,0,.2,1);
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ── TYPE A — DARK ── */
+.slide-dark { background: var(--dark); }
+.slide-dark::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(45deg,  transparent, transparent 70px, rgba(245,200,0,.016) 70px, rgba(245,200,0,.016) 71px),
+    repeating-linear-gradient(-45deg, transparent, transparent 70px, rgba(255,255,255,.01) 70px, rgba(255,255,255,.01) 71px);
+}
+.dark-logo { position: absolute; top: 24px; left: 36px; text-align: left; line-height: 1.45; }
+.dark-logo-main { font-size: 12px; font-weight: 700; color: rgba(255,255,255,.8); letter-spacing: .5px; }
+.dark-logo-sub  { font-size: 11px; font-weight: 300; color: rgba(255,255,255,.38); letter-spacing: .5px; }
+.dark-body {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  padding: 0 clamp(52px,7vw,120px) 52px; position: relative; z-index: 1;
+}
+.dark-title { font-size: clamp(30px,4vw,58px); line-height: 1.18; font-weight: 300; color: var(--white); }
+.dark-title .em { display: block; font-weight: 900; color: var(--yellow); font-size: clamp(38px,5vw,72px); }
+.accent-bar { width: 80px; height: 5px; background: var(--yellow); border-radius: 3px; margin: 20px 0 18px; }
+.dark-subtitle { font-size: clamp(15px,1.6vw,22px); font-weight: 400; color: rgba(255,255,255,.65); max-width: 660px; line-height: 1.55; }
+.dark-footer {
+  position: absolute; bottom: 0; right: 0; left: 0; height: 52px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex; align-items: center; padding: 0 clamp(28px,4vw,60px); justify-content: flex-end;
+}
+.footer-name { font-size: 13px; font-weight: 600; color: var(--yellow); letter-spacing: .3px; }
+
+/* KPI tiles */
+.kpi-row { display: flex; gap: clamp(10px,1.5vw,20px); margin-top: 26px; flex-wrap: wrap; }
+.kpi-tile {
+  flex: 1; min-width: 120px;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(245,200,0,.25);
+  padding: clamp(14px,1.6vw,22px); display: flex; flex-direction: column; gap: 6px;
+}
+.kpi-val { font-size: clamp(32px,3.6vw,54px); font-weight: 900; color: var(--yellow); line-height: 1; }
+.kpi-lbl { font-size: clamp(13px,1.2vw,17px); font-weight: 400; color: rgba(255,255,255,.65); line-height: 1.35; }
+.kpi-ctx { font-size: clamp(11px,.95vw,14px); font-weight: 300; color: rgba(255,255,255,.38); }
+.stat-row { display: flex; gap: clamp(20px,2.5vw,40px); margin-top: 20px; flex-wrap: wrap; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.1); }
+.stat-item { display: flex; flex-direction: column; gap: 4px; }
+.stat-num { font-size: clamp(18px,2vw,28px); font-weight: 700; color: var(--yellow); }
+.stat-lbl { font-size: clamp(12px,1.1vw,16px); font-weight: 400; color: rgba(255,255,255,.5); }
+
+/* Action list */
+.action-list { margin-top: 24px; display: flex; flex-direction: column; gap: 18px; }
+.action-item { display: flex; gap: 14px; align-items: flex-start; }
+.action-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; margin-top: 6px; }
+.action-text { font-size: clamp(15px,1.55vw,22px); font-weight: 400; color: rgba(255,255,255,.82); line-height: 1.55; }
+.action-text strong { font-weight: 700; color: var(--white); }
+
+/* ── TYPE B — LIGHT BULLETS ── */
+.slide-light { background: var(--white); }
+.slide-light::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: var(--stripe); background: var(--yellow); }
+.light-top { padding: clamp(24px,3.5vh,48px) clamp(36px,5vw,80px) 0; padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px); }
+.section-tag { display: inline-block; font-size: clamp(11px,.9vw,13px); font-weight: 700; color: var(--yellow); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
+.light-title { font-size: clamp(26px,3.2vw,46px); font-weight: 800; color: var(--yellow); line-height: 1.15; margin-bottom: 7px; }
+.light-subtitle { font-size: clamp(14px,1.5vw,20px); font-weight: 500; color: var(--muted); line-height: 1.4; }
+.light-divider { height: 1px; background: var(--border); margin: clamp(14px,2.2vh,26px) 0; margin-right: calc(var(--stripe) + 14px); }
+.light-content {
+  flex: 1; display: flex; flex-direction: column; gap: clamp(14px,2vh,26px);
+  padding: 0 clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px); overflow: hidden;
+}
+.bullet { display: flex; flex-direction: column; gap: 6px; padding-right: 28px; position: relative; }
+.bullet::before { content: ''; position: absolute; right: 0; top: 9px; width: 14px; height: 14px; border-radius: 50%; background: var(--yellow); }
+.bullet-label { font-size: clamp(16px,1.7vw,24px); font-weight: 700; color: var(--text); line-height: 1.3; }
+.bullet-body { font-size: clamp(14px,1.4vw,19px); font-weight: 400; color: var(--muted); line-height: 1.65; }
+.bullet-body strong { font-weight: 700; color: var(--text); }
+.light-footer {
+  height: 46px; border-top: 1px solid var(--border); display: flex; align-items: center;
+  padding: 0 clamp(28px,4vw,60px); justify-content: flex-end; flex-shrink: 0; margin-right: var(--stripe);
+}
+.light-footer .footer-name { color: var(--muted); font-size: 13px; font-weight: 500; }
+
+/* Mini table */
+.mini-tbl { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.mini-tbl th { font-size: clamp(12px,1.05vw,15px); font-weight: 600; color: var(--muted); text-align: right; padding: 7px 12px; border-bottom: 2px solid var(--border); background: var(--offwhite); }
+.mini-tbl td { font-size: clamp(13px,1.2vw,17px); font-weight: 400; color: var(--text); padding: 7px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.res-ok   { color: var(--green); font-weight: 700; }
+.res-warn { color: var(--orange); font-weight: 700; }
+.res-open { color: var(--muted); }
+.highlight-row td { background: rgba(230,126,34,.06); }
+
+/* ── TYPE C — CARDS ── */
+.slide-cards { background: var(--white); }
+.slide-cards::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: var(--stripe); background: var(--yellow); }
+.cards-header { background: var(--dark); padding: clamp(16px,2.2vh,28px) clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe)); flex-shrink: 0; }
+.cards-header-title    { font-size: clamp(22px,2.6vw,36px); font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+.cards-header-subtitle { font-size: clamp(13px,1.3vw,18px); font-weight: 400; color: rgba(255,255,255,.78); }
+.cards-grid {
+  flex: 1; display: grid; grid-template-columns: repeat(3,1fr);
+  gap: clamp(12px,1.8vw,22px);
+  padding: clamp(18px,2.6vh,30px) clamp(36px,5vw,80px);
+  padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 6px);
+  align-items: start;
+}
+.cards-grid-4 { grid-template-columns: repeat(2,1fr); }
+.card {
+  background: var(--offwhite); border: 1px solid var(--border);
+  padding: clamp(16px,1.8vw,24px); display: flex; flex-direction: column; gap: 10px;
+  position: relative; overflow: hidden; height: 100%;
+}
+.card::before { content: ''; position: absolute; top: 0; right: 0; left: 0; height: 4px; }
+.card.green::before  { background: var(--green); }
+.card.red::before    { background: var(--red); }
+.card.orange::before { background: var(--orange); }
+.card.yellow::before { background: var(--yellow); }
+.card-icon  { font-size: clamp(40px,4.5vw,62px); line-height: 1; }
+.card-stat  { font-size: clamp(28px,3.2vw,48px); font-weight: 900; line-height: 1; }
+.card.orange .card-stat { color: var(--orange); }
+.card.red    .card-stat { color: var(--red); }
+.card.green  .card-stat { color: var(--green); }
+.card.yellow .card-stat { color: #8a6a00; }
+.card-stat-label { font-size: clamp(11px,1vw,14px); font-weight: 600; color: var(--muted); margin-top: -4px; }
+.card-title { font-size: clamp(16px,1.7vw,22px); font-weight: 700; color: var(--text); line-height: 1.25; }
+.card-items { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+.card-item {
+  font-size: clamp(13px,1.2vw,17px); font-weight: 400; color: var(--muted); line-height: 1.5;
+  padding-right: 16px; position: relative;
+}
+.card-item::before { content: ''; position: absolute; right: 3px; top: 7px; width: 6px; height: 6px; border-radius: 50%; background: var(--border); }
+.card-item strong { font-weight: 700; color: var(--text); }
+.card-badge { font-size: clamp(11px,1vw,14px); font-weight: 700; letter-spacing: .4px; padding: 3px 10px; display: inline-block; margin-top: 4px; align-self: flex-start; }
+.card-badge.green  { background: var(--green-bg); color: var(--green); }
+.card-badge.red    { background: var(--red-bg);   color: var(--red); }
+.card-badge.orange { background: #fef3e2;          color: var(--orange); }
+.card-badge.yellow { background: rgba(245,200,0,.18); color: #7a5f00; }
+.cards-footer {
+  height: 46px; border-top: 1px solid var(--border); display: flex; align-items: center;
+  padding: 0 clamp(28px,4vw,60px); justify-content: flex-end; flex-shrink: 0; margin-right: var(--stripe);
+}
+.cards-footer .footer-name { color: var(--muted); font-size: 13px; font-weight: 500; }
+.cards-pos-note {
+  background: var(--green-bg); border-top: 1px solid rgba(45,125,70,.2);
+  padding: 9px clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 6px);
+  font-size: clamp(12px,1.1vw,16px); color: var(--green); font-weight: 600; flex-shrink: 0;
+}
+.scope-note {
+  background: var(--offwhite); border: 1px solid var(--border); border-right: 3px solid var(--yellow);
+  padding: 10px 16px; margin: 0 clamp(36px,5vw,80px);
+  margin-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 6px);
+  font-size: clamp(12px,1.1vw,15px); color: var(--muted); flex-shrink: 0; line-height: 1.5;
+}
+.scope-note span { font-weight: 700; color: var(--text); }
+
+/* ── TYPE E — TABLE SLIDE ── */
+.slide-tbl { background: var(--white); }
+.slide-tbl::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: var(--stripe); background: var(--yellow); }
+.tbl-header { background: var(--dark); padding: clamp(14px,2vh,22px) clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe)); flex-shrink: 0; }
+.tbl-header-title    { font-size: clamp(20px,2.4vw,32px); font-weight: 700; color: var(--yellow); margin-bottom: 4px; }
+.tbl-header-subtitle { font-size: clamp(13px,1.2vw,17px); font-weight: 400; color: rgba(255,255,255,.75); }
+.tbl-body {
+  flex: 1; display: flex; flex-direction: column;
+  padding: clamp(10px,1.4vh,16px) clamp(36px,5vw,80px);
+  padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 6px); overflow: hidden;
+}
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th {
+  background: var(--offwhite); color: var(--muted);
+  font-size: clamp(11px,1vw,13px); font-weight: 700; text-align: right;
+  padding: 7px 10px; border-bottom: 2px solid var(--border); border-top: 1px solid var(--border); white-space: nowrap;
+}
+.data-table td {
+  font-size: clamp(12px,1.1vw,15px); color: var(--text);
+  padding: 6px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; line-height: 1.35;
+}
+.data-table tr:hover td { background: rgba(245,200,0,.05); }
+.row-crit td { background: rgba(176,58,46,.04); }
+.case-num { font-size: clamp(10px,.88vw,12px); color: var(--muted); font-weight: 500; white-space: nowrap; direction: ltr; text-align: left; }
+.sev { display: inline-block; font-size: clamp(10px,.9vw,12px); font-weight: 700; padding: 2px 8px; white-space: nowrap; }
+.sev-c { background: var(--red-bg); color: var(--red); }
+.sev-h { background: #fef3e2;       color: var(--orange); }
+.sev-m { background: rgba(245,200,0,.16); color: #7a6200; }
+.age   { font-weight: 700; }
+.age-d { color: var(--red); }
+.age-w { color: var(--orange); }
+.blk-y { color: var(--green); font-weight: 700; }
+.blk-n { color: var(--border); }
+.tbl-note { font-size: clamp(10px,.85vw,12px); color: var(--muted); padding-top: 6px; border-top: 1px solid var(--border); flex-shrink: 0; margin-top: 5px; }
+.tbl-summary { display: flex; gap: 22px; padding: 7px 0; flex-shrink: 0; flex-wrap: wrap; }
+.tbl-sum-item { font-size: clamp(11px,1vw,14px); font-weight: 600; color: var(--muted); }
+.tbl-sum-item span { font-weight: 900; margin-left: 3px; }
+.tbl-sum-item span.c { color: var(--red); }
+.tbl-sum-item span.h { color: var(--orange); }
+.tbl-sum-item span.m { color: #7a6200; }
+.tbl-sum-item span.b { color: var(--green); }
+
+/* ── NAVIGATION ── */
+#counter { position: fixed; top: 18px; left: 22px; font-size: 12px; font-weight: 500; direction: ltr; color: rgba(255,255,255,.5); letter-spacing: .5px; z-index: 200; pointer-events: none; }
+#dots { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; align-items: center; z-index: 200; }
+.dot { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.3); cursor: pointer; transition: width .3s ease, background .3s ease; border: none; padding: 0; }
+.dot.on { width: 26px; background: var(--yellow); }
+.nav-arrow {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 64px; background: rgba(61,65,87,.5); border: none;
+  color: rgba(255,255,255,.8); font-size: 22px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .2s, color .2s; z-index: 200; backdrop-filter: blur(4px);
+}
+.nav-arrow:hover { background: var(--yellow); color: var(--darker); }
+#btn-next { left: 0; }
+#btn-prev { right: 0; }
+
+/* ── ANIMATIONS ── */
+.slide.active .dark-body,
+.slide.active .light-top,
+.slide.active .cards-header,
+.slide.active .tbl-header { animation: fadeUp .42s cubic-bezier(.25,.46,.45,.94) both; }
+.slide.active .light-content { animation: fadeUp .42s .08s both; }
+.slide.active .cards-grid   { animation: fadeUp .42s .10s both; }
+.slide.active .tbl-body     { animation: fadeUp .42s .10s both; }
+.slide.active .bullet:nth-child(1) { animation: fadeUp .4s .10s both; }
+.slide.active .bullet:nth-child(2) { animation: fadeUp .4s .20s both; }
+.slide.active .bullet:nth-child(3) { animation: fadeUp .4s .30s both; }
+.slide.active .card:nth-child(1) { animation: cardIn .4s .12s both; }
+.slide.active .card:nth-child(2) { animation: cardIn .4s .22s both; }
+.slide.active .card:nth-child(3) { animation: cardIn .4s .32s both; }
+.slide.active .card:nth-child(4) { animation: cardIn .4s .42s both; }
+.slide.active .action-item:nth-child(1) { animation: fadeUp .4s .20s both; }
+.slide.active .action-item:nth-child(2) { animation: fadeUp .4s .34s both; }
+.slide.active .action-item:nth-child(3) { animation: fadeUp .4s .48s both; }
+.slide.active .action-item:nth-child(4) { animation: fadeUp .4s .62s both; }
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cardIn { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div id="deck">
+
+<!-- ════════════════════════════════
+     שקף 1 — שקף שער (Cover)
+════════════════════════════════ -->
+<div class="slide slide-dark active" id="s1">
+  <div class="dark-logo">
+    <div class="dark-logo-main">מנורה מבטחים · תשתיות טכנולוגיות</div>
+    <div class="dark-logo-sub">יוני 2026</div>
+  </div>
+  <div class="dark-body">
+    <div class="dark-title">
+      <span style="font-size:clamp(22px,2.8vw,42px);font-weight:300;color:rgba(255,255,255,.75)">הטמעת</span>
+      <span class="em">Helix-ITSM</span>
+      <span style="font-size:clamp(22px,2.8vw,42px);font-weight:300;">תמונת מצב</span>
+      <span style="display:block;font-size:clamp(18px,2.2vw,34px);font-weight:400;color:rgba(255,255,255,.7);margin-top:6px">חודש לאחר עלייה לאוויר</span>
+    </div>
+    <div class="accent-bar"></div>
+    <div class="dark-subtitle">ועדת היגוי · יוני 2026</div>
+  </div>
+  <div class="dark-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 2 — סטטוס Hypercare (KPIs)
+════════════════════════════════ -->
+<div class="slide slide-dark" id="s2">
+  <div class="dark-logo">
+    <div class="dark-logo-main">Helix-ITSM · מנורה מבטחים</div>
+    <div class="dark-logo-sub">Steering Committee · יוני 2026</div>
+  </div>
+  <div class="dark-body">
+    <div class="dark-title">
+      <span class="em">65 קריאות פתוחות</span>
+      <span style="font-size:clamp(16px,2vw,30px);font-weight:300;">מתוך 422 שנפתחו בתקופת ה-Hypercare</span>
+    </div>
+    <div class="accent-bar"></div>
+    <div class="kpi-row">
+      <div class="kpi-tile">
+        <div class="kpi-val">84%</div>
+        <div class="kpi-lbl">מהקריאות טופלו ונסגרו</div>
+        <div class="kpi-ctx">357 מתוך 422</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val">46%</div>
+        <div class="kpi-lbl">מהפתוחות חרגו מ-SLA</div>
+        <div class="kpi-ctx">30 מתוך 65</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val">14</div>
+        <div class="kpi-lbl">קריאות פתוחות מעל 30 יום</div>
+        <div class="kpi-ctx">חלקן High / Critical</div>
+      </div>
+      <div class="kpi-tile">
+        <div class="kpi-val">41</div>
+        <div class="kpi-lbl">ימים — הקריאה הוותיקה ביותר</div>
+        <div class="kpi-ctx">ממוצע פתוחות: 15.1 ימים</div>
+      </div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-num">1</div>
+        <div class="stat-lbl">קריאה Critical פתוחה</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">6</div>
+        <div class="stat-lbl">קריאות High פתוחות</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">57%</div>
+        <div class="stat-lbl">פתוחות — Warning או Breach</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">13</div>
+        <div class="stat-lbl">נושאים פתוחים מול BMC</div>
+      </div>
+    </div>
+  </div>
+  <div class="dark-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 3 — השלכות עסקיות (Cards)
+════════════════════════════════ -->
+<div class="slide slide-cards" id="s3">
+  <div class="cards-header">
+    <div class="cards-header-title">השלכות עסקיות — נושאים פתוחים משפיעים על התפעול</div>
+    <div class="cards-header-subtitle">תחומים מרכזיים עם פגיעה פעילה בפעילות השוטפת</div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card orange">
+      <div class="card-icon">🔗</div>
+      <div class="card-stat">30</div>
+      <div class="card-stat-label">ימים — קריאה Critical פתוחה</div>
+      <div class="card-title">ממשקים ו-HR</div>
+      <div class="card-items">
+        <div class="card-item">Jira · Azure · SAP HR — שיבושים בתהליכי אינטגרציה</div>
+        <div class="card-item">תהליכי גיוס ועזיבה מושפעים</div>
+        <div class="card-item">ממשק מול ספקים חיצוניים — לא פועל במלואו</div>
+      </div>
+      <div class="card-badge orange">השפעה על תהליכי HR</div>
+    </div>
+
+    <div class="card red">
+      <div class="card-icon">✉️</div>
+      <div class="card-stat">3+</div>
+      <div class="card-stat-label">שבועות בחקירה — ללא פתרון</div>
+      <div class="card-title">מיילים ו-Notifications</div>
+      <div class="card-items">
+        <div class="card-item">לקוחות לא מקבלים עדכונים על פניותיהם</div>
+        <div class="card-item">מיילים שנשלחים — תוכן HTML שגוי</div>
+        <div class="card-item">BMC R&D בחקירה פעילה</div>
+      </div>
+      <div class="card-badge red">בחקירה — ללא פתרון</div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-icon">⏱️</div>
+      <div class="card-stat">46%</div>
+      <div class="card-stat-label">מהקריאות הפתוחות חרגו מ-SLA</div>
+      <div class="card-title">SLA וניהול קריאות</div>
+      <div class="card-items">
+        <div class="card-item">14 קריאות פתוחות מעל 30 יום</div>
+        <div class="card-item">הקריאה הוותיקה: 41 ימים ← עדיין פתוחה</div>
+        <div class="card-item">36 קריאות ממתינות ללא פעילות מתועדת</div>
+      </div>
+      <div class="card-badge orange">חריגת SLA נרחבת</div>
+    </div>
+
+  </div>
+  <div class="cards-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 4 — 13 נושאים מול BMC (Table)
+════════════════════════════════ -->
+<div class="slide slide-tbl" id="s4">
+  <div class="tbl-header">
+    <div class="tbl-header-title">13 נושאים פתוחים מול היצרן — חלקם ממתינים 34 ימים</div>
+    <div class="tbl-header-subtitle">11/13 מסווגים חוסמי Go-Live · נכון ל-03.06.2026</div>
+  </div>
+  <div class="tbl-body">
+    <div class="tbl-summary">
+      <div class="tbl-sum-item"><span class="c">1</span> Critical</div>
+      <div class="tbl-sum-item"><span class="h">9</span> High</div>
+      <div class="tbl-sum-item"><span class="m">2</span> Medium</div>
+      <div class="tbl-sum-item"><span class="b">11/13</span> חוסמי Go-Live</div>
+    </div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>קייס #</th>
+          <th>נושא</th>
+          <th>חומרה</th>
+          <th>ימים</th>
+          <th>חוסם</th>
+          <th>מצב נוכחי</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="case-num">02127489</td>
+          <td>ממשק מעורב עברית/אנגלית — Smart IT</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age age-d">34</span></td>
+          <td class="blk-y">✓</td>
+          <td>Workaround — פתרון קבוע בבדיקה</td>
+        </tr>
+        <tr>
+          <td class="case-num">02129339</td>
+          <td>Bulk Assignment — DWP / SmartIT</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age age-d">30</span></td>
+          <td class="blk-y">✓</td>
+          <td>BMC R&D בחקירה</td>
+        </tr>
+        <tr>
+          <td class="case-num">02133071</td>
+          <td>בקשות שלא תועדו — Webservice</td>
+          <td><span class="sev sev-m">Medium</span></td>
+          <td><span class="age age-w">21</span></td>
+          <td class="blk-n">—</td>
+          <td>BMC בוחנת logging נוסף</td>
+        </tr>
+        <tr>
+          <td class="case-num">02135415</td>
+          <td>מידע Resolution חסר — DWP Notifications</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age age-w">15</span></td>
+          <td class="blk-y">✓</td>
+          <td>ממתין לקידום לייצור</td>
+        </tr>
+        <tr class="row-crit">
+          <td class="case-num">02135761</td>
+          <td><strong>ביצועים / גישה ל-Smart IT</strong></td>
+          <td><span class="sev sev-c">Critical</span></td>
+          <td><span class="age age-w">14</span></td>
+          <td class="blk-y">✓</td>
+          <td>בחקירה משותפת — ראה שקף 5</td>
+        </tr>
+        <tr>
+          <td class="case-num">2136541</td>
+          <td>שגיאת Jira Create Issue</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age age-w">13</span></td>
+          <td class="blk-y">✓</td>
+          <td>BMC העבירה פתרון — ממתין לאישור</td>
+        </tr>
+        <tr>
+          <td class="case-num">2137048</td>
+          <td>סינון Full Name — Ticket Console</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age age-w">12</span></td>
+          <td class="blk-y">✓</td>
+          <td>פתרון סופק — Matrix מאמתת</td>
+        </tr>
+        <tr>
+          <td class="case-num">02137815</td>
+          <td>Status Reasons — TicketConsole / PWA</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age">9</span></td>
+          <td class="blk-y">✓</td>
+          <td>שחזור בסביבת Dev — בבדיקה</td>
+        </tr>
+        <tr>
+          <td class="case-num">02137816</td>
+          <td>תוויות עברית — Ticket Console</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age">9</span></td>
+          <td class="blk-y">✓</td>
+          <td>BMC ממשיכה לחקור</td>
+        </tr>
+        <tr>
+          <td class="case-num">02138316</td>
+          <td>Infinite Session — דשבורדי Helix</td>
+          <td><span class="sev sev-m">Medium</span></td>
+          <td><span class="age">8</span></td>
+          <td class="blk-n">—</td>
+          <td>ממתין לאימות Matrix</td>
+        </tr>
+        <tr>
+          <td class="case-num">02139632</td>
+          <td>מיילים לא נשלחים — WO Assignees</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age">6</span></td>
+          <td class="blk-y">✓</td>
+          <td>BMC מפעילה R&D</td>
+        </tr>
+        <tr>
+          <td class="case-num">02139637</td>
+          <td>שחיתות HTML — תבניות מייל</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age">6</span></td>
+          <td class="blk-y">✓</td>
+          <td>BMC: Dev fix בעבודה</td>
+        </tr>
+        <tr>
+          <td class="case-num">02139744</td>
+          <td>Status Reason — דפדפן עברית</td>
+          <td><span class="sev sev-h">High</span></td>
+          <td><span class="age">6</span></td>
+          <td class="blk-y">✓</td>
+          <td>פתרון זוהה — ממתין ל-Matrix</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="tbl-note">מקור: Shridhar Joshi, BMC OnBoarding Support Manager · 03.06.2026 · עמודת "ימים" = ימים מאז פתיחת הקייס</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 5 — נושא הביצועים (Bullets)
+════════════════════════════════ -->
+<div class="slide slide-light" id="s5">
+  <div class="light-top">
+    <div class="section-tag">נושא קריטי</div>
+    <div class="light-title">נושא הביצועים — Severity 1 · 14+ ימים · חקירה פעילה</div>
+    <div class="light-subtitle">קייס 02135761 · Go-Live Blocker · נפתח 02.06.2026</div>
+  </div>
+  <div class="light-divider"></div>
+  <div class="light-content">
+    <div class="bullet">
+      <div class="bullet-label">ממצאי החקירה עד כה</div>
+      <div class="bullet-body">
+        <table class="mini-tbl">
+          <thead><tr><th>גורם שנבדק</th><th>על ידי</th><th>תוצאה</th></tr></thead>
+          <tbody>
+            <tr><td>Server Memory · Logs · Alerts</td><td>BMC</td><td class="res-ok">תקין — אין ממצא</td></tr>
+            <tr class="highlight-row"><td>לאפטופ לא-מנוהל + רשת ביתית</td><td>מנורה</td><td class="res-ok"><strong>אותה תוצאה — רשת מנורה נשללת</strong></td></tr>
+            <tr><td>Cisco User · Packet Capture</td><td>בתיאום</td><td class="res-open">ממתין</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="bullet">
+      <div class="bullet-label">מחויבות BMC — מייל 15.06.2026</div>
+      <div class="bullet-body">
+        Shridhar Joshi (OnBoarding Support Manager) — עדכון פעמיים בשבוע (ראשון/חמישי)<br>
+        <strong>אין ETA לפתרון כרגע</strong>
+      </div>
+    </div>
+    <div class="bullet">
+      <div class="bullet-label">הציפייה מהפגישה</div>
+      <div class="bullet-body">
+        מנורה השקיעה משאבים לפי בקשת BMC ושללה את גורם הרשת.<br>
+        <strong>נדרש ETA ברור מ-BMC עד הפגישה הבאה</strong>
+      </div>
+    </div>
+  </div>
+  <div class="light-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 6 — השקעת זמן (Bullets)
+════════════════════════════════ -->
+<div class="slide slide-light" id="s6">
+  <div class="light-top">
+    <div class="section-tag">עלות תפעולית</div>
+    <div class="light-title">השקעת זמן בנושאי מוצר — עלות לא מתוכננת</div>
+    <div class="light-subtitle">שעות של מנורה ומטריקס הופנו לטיפול בנושאים שאינם הטמעה</div>
+  </div>
+  <div class="light-divider"></div>
+  <div class="light-content">
+    <div class="bullet">
+      <div class="bullet-label">מקורות ההשקעה</div>
+      <div class="bullet-body">
+        <table class="mini-tbl">
+          <thead><tr><th>פעילות</th><th>מי מעורב</th></tr></thead>
+          <tbody>
+            <tr><td>חקירה משותפת מול BMC — sessions, packet captures</td><td>מנורה + מטריקס</td></tr>
+            <tr><td>נושא ביצועים — בדיקות, תיאום, מעקב</td><td>מנורה</td></tr>
+            <tr><td>נושא המיילים — 3+ שבועות ניסיונות</td><td>מטריקס</td></tr>
+            <tr><td>קריאות 30+ ימים — ממשיכות לדרוש טיפול</td><td>מנורה + מטריקס</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="bullet">
+      <div class="bullet-label">דוגמה — נושא המיילים</div>
+      <div class="bullet-body">
+        פתוח מאז תחילת ה-Hypercare · BMC R&D בחקירה · <strong>אין פתרון עדיין</strong><br>
+        לקוחות מקבלים מיילים עם HTML גולמי / אינם מקבלים כלל
+      </div>
+    </div>
+    <div class="bullet">
+      <div class="bullet-label">נושא לאיזון</div>
+      <div class="bullet-body">
+        עלות שעות הטיפול בנושאי מוצר לא הייתה בתכנון ההטמעה.<br>
+        <strong>מוצע: בחינת מנגנון לכיסוי עלות זו — דיון ייעודי עם BMC</strong>
+      </div>
+    </div>
+  </div>
+  <div class="light-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 7 — ממצאי הניהול (Cards 2×2)
+════════════════════════════════ -->
+<div class="slide slide-cards" id="s7">
+  <div class="cards-header">
+    <div class="cards-header-title">ממצאי תהליכי הניהול — הזדמנויות לשיפור</div>
+    <div class="cards-header-subtitle">4 תחומים זוהו בתקופת ה-Hypercare · פעולות החלו ב-15.06.2026</div>
+  </div>
+  <div class="cards-grid cards-grid-4">
+
+    <div class="card orange">
+      <div class="card-icon">🔄</div>
+      <div class="card-title">תיאום בין חברי הצוות</div>
+      <div class="card-items">
+        <div class="card-item">כפל טיפול בנושאים זוהה</div>
+        <div class="card-item">החלטות מישיבות — לא תמיד יוצאות לפועל</div>
+        <div class="card-item">ידע מצטבר לא עובר בין חברי הצוות</div>
+      </div>
+      <div class="card-badge orange">שיפור: בעלים ברורים לכל נושא</div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-icon">👤</div>
+      <div class="card-title">רציפות משאבים</div>
+      <div class="card-items">
+        <div class="card-item">שינויים בהרכב הצוות השפיעו על רצף הטיפול</div>
+        <div class="card-item">קריאות "תקועות" בגלל נציג נעדר</div>
+        <div class="card-item">15+ קריאות ללא שיוך לנציג</div>
+      </div>
+      <div class="card-badge orange">נדרש: נקודות קשר יציבות</div>
+    </div>
+
+    <div class="card red">
+      <div class="card-icon">📋</div>
+      <div class="card-title">ניהול קריאות</div>
+      <div class="card-items">
+        <div class="card-item">36 קריאות "Assigned" — ללא פעילות מתועדת</div>
+        <div class="card-item">לקוחות מתקשרים לשאול סטטוס — עומס נוסף</div>
+        <div class="card-item">19+ קריאות ללא קטגוריה</div>
+      </div>
+      <div class="card-badge red">נדרש: עדכון יומי מחייב</div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-icon">📝</div>
+      <div class="card-title">תיעוד וידע</div>
+      <div class="card-items">
+        <div class="card-item">פתרונות לא תועדו באופן שיטתי</div>
+        <div class="card-item">גרם לחקירה חוזרת — שעות אבודות</div>
+        <div class="card-item">ידע לא עובר בין חברי הצוות</div>
+      </div>
+      <div class="card-badge yellow">נדרש: תבנית תיעוד סטנדרטית</div>
+    </div>
+
+  </div>
+  <div class="cards-pos-note">✓ פעולות שהחלו ב-15.06 — הגדרת חלוקת תפקידים · שיפור תקשורת לקוח · ניהול Change · העברת ידע</div>
+  <div class="cards-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 8 — פערי תכולה שלב א' (Cards)
+════════════════════════════════ -->
+<div class="slide slide-cards" id="s8">
+  <div class="cards-header">
+    <div class="cards-header-title">פערי תכולה משלב א' — בסיס לתכנון שלב ב'</div>
+    <div class="cards-header-subtitle">תכולות שנדונו לשלב א' ולא עלו לאוויר · 35+ פריטים בסה"כ</div>
+  </div>
+  <div class="cards-grid">
+
+    <div class="card green">
+      <div class="card-icon">🖥️</div>
+      <div class="card-title">מחלקת IT ומוקד שירות</div>
+      <div class="card-items">
+        <div class="card-item">SLA/OLA — הגדרות חלקיות</div>
+        <div class="card-item">ניטור אבטחה — Qradar</div>
+        <div class="card-item">ניהול תקלות מורחב (Change Management)</div>
+        <div class="card-item">ניטור K8S</div>
+        <div class="card-item">דוחות מתקדמים</div>
+        <div class="card-item">ניהול Outage</div>
+      </div>
+      <div class="card-badge green">~15 פריטים</div>
+    </div>
+
+    <div class="card orange">
+      <div class="card-icon">🛠️</div>
+      <div class="card-title">מרכז שירות ותפעול</div>
+      <div class="card-items">
+        <div class="card-item">OLA — ניהול ספקים</div>
+        <div class="card-item">Jira — תכולות מלאות (לא רק חיבור)</div>
+        <div class="card-item">ניהול תשתיות (ITOM / CMDB)</div>
+        <div class="card-item">ניהול Outage</div>
+        <div class="card-item">תהליך פתיחה מחדש (Reopen)</div>
+      </div>
+      <div class="card-badge orange">~12 פריטים</div>
+    </div>
+
+    <div class="card red">
+      <div class="card-icon">🛡️</div>
+      <div class="card-title">תשתיות ואבטחת מידע</div>
+      <div class="card-items">
+        <div class="card-item">OLA — ניהול ספקים</div>
+        <div class="card-item">Control-M — 5 תכולות CMDB</div>
+        <div class="card-item">BigFix — CMDB</div>
+        <div class="card-item">סוגי קריאות</div>
+      </div>
+      <div class="card-badge red">~8 פריטים</div>
+    </div>
+
+  </div>
+  <div class="scope-note">
+    <span>פריטים שהיו בהיקף ולא בוצעו</span> — בירור אחריות חוזית; ציפייה: מימוש ללא עלות נוספת &nbsp;|&nbsp;
+    <span>פריטים שלא היו בהסכם</span> — תמחור ותכנון כחלק מהיקף שלב ב'
+  </div>
+  <div class="cards-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+<!-- ════════════════════════════════
+     שקף 9 — נושאים לדיון (Dark)
+════════════════════════════════ -->
+<div class="slide slide-dark" id="s9">
+  <div class="dark-logo">
+    <div class="dark-logo-main">Helix-ITSM · מנורה מבטחים</div>
+    <div class="dark-logo-sub">Steering Committee · יוני 2026</div>
+  </div>
+  <div class="dark-body">
+    <div class="dark-title">
+      <span class="em">נושאים לדיון</span>
+    </div>
+    <div class="accent-bar"></div>
+    <div class="action-list">
+      <div class="action-item">
+        <div class="action-dot"></div>
+        <div class="action-text">
+          <strong>תכנית בדיקות קונפיגורציה מ-BMC</strong> —
+          ETA מחייב לכל 13 הקייסים הפתוחים · עד 23.06.2026 · עדכון פעמיים בשבוע
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot"></div>
+        <div class="action-text">
+          <strong>עיגון מבנה ניהול הפרויקט</strong> —
+          נקודות קשר קבועות בשמות · עדכון שבועי ל-SC · אחריות ניהולית ברורה לכל תחום
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot"></div>
+        <div class="action-text">
+          <strong>כיסוי עלות שעות לא מתוכננות</strong> —
+          מנגנון לכיסוי שעות מנורה ומטריקס בנושאי מוצר · הצעה עד 30.06.2026
+        </div>
+      </div>
+      <div class="action-item">
+        <div class="action-dot"></div>
+        <div class="action-text">
+          <strong>שלב ב'</strong> —
+          לדיון תכולה, זמני יישום ותמחור
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="dark-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
+</div>
+
+</div><!-- /deck -->
+
+<div id="dots">
+  <button class="dot on" onclick="go(1)"></button>
+  <button class="dot"    onclick="go(2)"></button>
+  <button class="dot"    onclick="go(3)"></button>
+  <button class="dot"    onclick="go(4)"></button>
+  <button class="dot"    onclick="go(5)"></button>
+  <button class="dot"    onclick="go(6)"></button>
+  <button class="dot"    onclick="go(7)"></button>
+  <button class="dot"    onclick="go(8)"></button>
+  <button class="dot"    onclick="go(9)"></button>
+</div>
+<button class="nav-arrow" id="btn-next" onclick="next()">&#8249;</button>
+<button class="nav-arrow" id="btn-prev" onclick="prev()">&#8250;</button>
+<div id="counter">1 / 9</div>
+
+<script>
+let cur = 1;
+const TOTAL = 9;
+function go(n) {
+  if (n < 1 || n > TOTAL || n === cur) return;
+  document.getElementById('s' + cur).classList.remove('active');
+  cur = n;
+  document.getElementById('s' + cur).classList.add('active');
+  document.getElementById('counter').textContent = cur + ' / ' + TOTAL;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur - 1));
+  document.getElementById('btn-prev').style.opacity = cur === 1     ? '0.3' : '1';
+  document.getElementById('btn-next').style.opacity = cur === TOTAL ? '0.3' : '1';
+}
+function next() { go(cur + 1); }
+function prev() { go(cur - 1); }
+document.addEventListener('keydown', e => {
+  if      (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); prev(); }
+});
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) { dx > 0 ? next() : prev(); }
+});
+go(1);
+</script>
+</body>
+</html>
