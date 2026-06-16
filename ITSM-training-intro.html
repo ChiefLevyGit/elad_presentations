@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helix-ITSM — מבוא להדרכה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+
+:root {
+  --dark:     #3d4157;
+  --darker:   #2e3148;
+  --yellow:   #f5c800;
+  --yalpha:   rgba(245,200,0,0.12);
+  --white:    #ffffff;
+  --offwhite: #f7f7f8;
+  --text:     #1c1c2e;
+  --muted:    #5a5a72;
+  --border:   #e4e4ed;
+  --stripe:   8px;
+}
+
+body {
+  font-family: 'Heebo', sans-serif;
+  direction: rtl;
+  background: #1c1c2e;
+}
+
+/* ── Deck ── */
+#deck { position: relative; width: 100vw; height: 100vh; overflow: hidden; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.38s cubic-bezier(.4,0,.2,1);
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* ════════════════════════
+   TYPE A — DARK SLIDE
+════════════════════════ */
+.slide-dark { background: var(--dark); }
+.slide-dark::before {
+  content: '';
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    repeating-linear-gradient(45deg,  transparent, transparent 70px, rgba(245,200,0,.016) 70px, rgba(245,200,0,.016) 71px),
+    repeating-linear-gradient(-45deg, transparent, transparent 70px, rgba(255,255,255,.01) 70px, rgba(255,255,255,.01) 71px);
+}
+
+.dark-logo {
+  position: absolute; top: 24px; left: 36px;
+  text-align: left; line-height: 1.45; z-index: 1;
+}
+.dark-logo-main { font-size: 11px; font-weight: 700; color: rgba(255,255,255,.8); letter-spacing: .5px; }
+.dark-logo-sub  { font-size: 10px; font-weight: 300; color: rgba(255,255,255,.38); letter-spacing: .5px; }
+
+.dark-body {
+  flex: 1; display: flex; flex-direction: column;
+  justify-content: center;
+  padding: 0 clamp(52px,7vw,120px) 52px;
+  position: relative; z-index: 1;
+}
+.dark-pretitle {
+  font-size: clamp(12px,1.1vw,16px); font-weight: 400;
+  color: rgba(255,255,255,.45); margin-bottom: 10px; letter-spacing: .5px;
+}
+.dark-title {
+  font-size: clamp(28px,3.8vw,54px); line-height: 1.18;
+  font-weight: 300; color: var(--white);
+}
+.dark-title .em {
+  display: block; font-weight: 900;
+  color: var(--yellow); font-size: clamp(36px,4.8vw,66px);
+}
+.accent-bar {
+  width: 80px; height: 5px; background: var(--yellow);
+  border-radius: 3px; margin: 20px 0 16px;
+}
+.dark-subtitle {
+  font-size: clamp(14px,1.4vw,20px); font-weight: 400;
+  color: rgba(255,255,255,.62); max-width: 640px; line-height: 1.55;
+}
+.dark-footer {
+  position: absolute; bottom: 0; right: 0; left: 0; height: 52px;
+  border-top: 1px solid rgba(255,255,255,.12);
+  display: flex; align-items: center;
+  padding: 0 clamp(28px,4vw,60px); justify-content: flex-end;
+}
+.footer-name { font-size: 13px; font-weight: 600; color: var(--yellow); letter-spacing: .3px; }
+
+.dark-chips { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+.chip {
+  border: 1px solid rgba(245,200,0,.5); background: var(--yalpha);
+  color: rgba(255,255,255,.88); padding: 7px 18px;
+  font-size: clamp(11px,.95vw,14px); font-weight: 500; letter-spacing: .2px;
+}
+
+/* action list — numbered */
+.action-list { margin-top: 20px; display: flex; flex-direction: column; gap: 11px; }
+.action-item { display: flex; gap: 12px; align-items: flex-start; }
+.action-num {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 2px solid rgba(245,200,0,.55);
+  color: var(--yellow); font-size: 12px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 3px;
+  font-feature-settings: "tnum";
+}
+.action-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  background: var(--yellow); flex-shrink: 0; margin-top: 7px;
+}
+.action-text {
+  font-size: clamp(13px,1.25vw,17px); font-weight: 400;
+  color: rgba(255,255,255,.82); line-height: 1.5;
+}
+.action-text strong { font-weight: 700; color: var(--white); }
+
+.dark-note {
+  margin-top: 20px; padding: 11px 16px;
+  background: var(--yalpha);
+  border-right: 3px solid var(--yellow);
+  font-size: clamp(12px,1.1vw,15px); font-weight: 500;
+  color: rgba(255,255,255,.75); line-height: 1.5;
+}
+
+.phase-row {
+  margin-top: 18px;
+}
+.phase-label {
+  font-size: clamp(10px,.85vw,12px); font-weight: 700;
+  color: rgba(255,255,255,.35); letter-spacing: 1.2px;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+
+/* ════════════════════════
+   TYPE B — LIGHT + SPLIT
+════════════════════════ */
+.slide-light { background: var(--white); }
+.slide-light::after {
+  content: ''; position: absolute; top: 0; bottom: 0; right: 0;
+  width: var(--stripe); background: var(--yellow);
+}
+
+.light-top {
+  padding: clamp(24px,3.4vh,44px) clamp(36px,5vw,80px) 0;
+  padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px);
+  flex-shrink: 0;
+}
+.section-tag {
+  display: inline-block; font-size: clamp(10px,.85vw,12px);
+  font-weight: 700; color: var(--yellow);
+  letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px;
+}
+.light-title {
+  font-size: clamp(24px,3vw,42px); font-weight: 800;
+  color: var(--darker); line-height: 1.15; margin-bottom: 5px;
+}
+.light-title .hl { color: var(--yellow); }
+.light-subtitle {
+  font-size: clamp(13px,1.25vw,17px); font-weight: 500;
+  color: var(--muted); line-height: 1.4;
+}
+.light-divider {
+  height: 1px; background: var(--border);
+  margin: clamp(12px,2vh,22px) 0;
+  margin-right: calc(var(--stripe) + 14px);
+  flex-shrink: 0;
+}
+
+/* split body */
+.split-body {
+  flex: 1; display: grid; grid-template-columns: 1.55fr 1fr;
+  overflow: hidden; min-height: 0;
+}
+.split-text {
+  display: flex; flex-direction: column;
+  gap: clamp(12px,1.7vh,20px);
+  padding: 0 clamp(36px,5vw,80px) clamp(14px,2vh,24px);
+  padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px);
+  overflow: hidden;
+}
+.bullet {
+  display: flex; flex-direction: column; gap: 4px;
+  padding-right: 26px; position: relative;
+}
+.bullet::before {
+  content: ''; position: absolute; right: 0; top: 8px;
+  width: 12px; height: 12px; border-radius: 50%; background: var(--yellow);
+}
+.bullet-label {
+  font-size: clamp(14px,1.3vw,18px); font-weight: 700;
+  color: var(--text); line-height: 1.3;
+}
+.bullet-body {
+  font-size: clamp(12px,1.1vw,15px); font-weight: 400;
+  color: var(--muted); line-height: 1.65;
+}
+
+/* screenshot column */
+.split-image-col {
+  padding: 8px 20px 12px 24px;
+  display: flex; flex-direction: column;
+  align-items: stretch; justify-content: center;
+  gap: 8px; min-height: 0;
+}
+.screen-wrap {
+  border-radius: 5px; overflow: hidden;
+  box-shadow: 0 8px 28px rgba(0,0,0,.13), 0 2px 6px rgba(0,0,0,.07);
+  border: 1px solid #d8d8e4;
+  flex-shrink: 1;
+}
+.screen-bar {
+  background: var(--darker);
+  height: 24px; display: flex; align-items: center;
+  padding: 0 10px; gap: 5px; flex-shrink: 0;
+}
+.screen-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.2); }
+.screen-bar-text {
+  font-size: 9px; font-weight: 500; direction: ltr;
+  color: rgba(255,255,255,.5); letter-spacing: .3px; margin-right: 4px;
+}
+.screen-img { width: 100%; display: block; }
+.screen-caption {
+  font-size: 10.5px; font-weight: 500; text-align: center;
+  color: var(--muted); letter-spacing: .3px;
+}
+
+.light-footer {
+  height: 44px; border-top: 1px solid var(--border);
+  display: flex; align-items: center;
+  padding: 0 clamp(28px,4vw,60px); justify-content: flex-end;
+  flex-shrink: 0; margin-right: var(--stripe);
+}
+.light-footer .footer-name { color: var(--muted); font-size: 12px; font-weight: 500; }
+
+/* ════════════════════════
+   NAVIGATION
+════════════════════════ */
+#counter {
+  position: fixed; top: 18px; left: 22px;
+  font-size: 11px; font-weight: 500; direction: ltr;
+  color: rgba(255,255,255,.5); letter-spacing: .5px;
+  z-index: 200; pointer-events: none;
+}
+#dots {
+  position: fixed; bottom: 14px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 7px; align-items: center; z-index: 200;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 4px;
+  background: rgba(255,255,255,.3); cursor: pointer;
+  transition: width .3s, background .3s;
+  border: none; padding: 0;
+}
+.dot.on { width: 26px; background: var(--yellow); }
+.nav-arrow {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 64px;
+  background: rgba(61,65,87,.5); border: none;
+  color: rgba(255,255,255,.8); font-size: 22px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background .2s, color .2s;
+  z-index: 200; backdrop-filter: blur(4px);
+}
+.nav-arrow:hover { background: var(--yellow); color: var(--darker); }
+#btn-next { left: 0; }
+#btn-prev { right: 0; }
+
+/* ════════════════════════
+   ANIMATIONS
+════════════════════════ */
+.slide.active .dark-body    { animation: fadeUp .42s cubic-bezier(.25,.46,.45,.94) both; }
+.slide.active .light-top    { animation: fadeUp .38s cubic-bezier(.25,.46,.45,.94) both; }
+.slide.active .split-text   { animation: fadeUp .4s .08s both; }
+.slide.active .split-image-col { animation: fadeUp .4s .2s both; }
+
+.slide.active .bullet:nth-child(1) { animation: fadeUp .38s .08s both; }
+.slide.active .bullet:nth-child(2) { animation: fadeUp .38s .18s both; }
+.slide.active .bullet:nth-child(3) { animation: fadeUp .38s .28s both; }
+.slide.active .bullet:nth-child(4) { animation: fadeUp .38s .38s both; }
+
+.slide.active .action-item:nth-child(1) { animation: fadeUp .38s .16s both; }
+.slide.active .action-item:nth-child(2) { animation: fadeUp .38s .26s both; }
+.slide.active .action-item:nth-child(3) { animation: fadeUp .38s .36s both; }
+.slide.active .action-item:nth-child(4) { animation: fadeUp .38s .46s both; }
+.slide.active .action-item:nth-child(5) { animation: fadeUp .38s .56s both; }
+
+.slide.active .chip:nth-child(1) { animation: popIn .32s .32s both; }
+.slide.active .chip:nth-child(2) { animation: popIn .32s .42s both; }
+.slide.active .chip:nth-child(3) { animation: popIn .32s .52s both; }
+.slide.active .chip:nth-child(4) { animation: popIn .32s .62s both; }
+
+.slide.active .dark-note   { animation: fadeUp .38s .62s both; }
+.slide.active .phase-row   { animation: fadeUp .38s .64s both; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.84); }
+  to   { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+  <!-- ══════════════════════════════════════
+       שקף 1 — כריכה (Dark A)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-dark active" id="s1">
+    <div class="dark-logo">
+      <div class="dark-logo-main">BMC Helix-ITSM</div>
+      <div class="dark-logo-sub">מבוא להדרכה</div>
+    </div>
+    <div class="dark-body">
+      <div class="dark-pretitle">מאי 2026 · מנורה מבטחים</div>
+      <div class="dark-title">
+        <span>ברוכים הבאים ל</span>
+        <span class="em">Helix-ITSM</span>
+      </div>
+      <div class="accent-bar"></div>
+      <div class="dark-subtitle">
+        פלטפורמת ניהול השירות הארגוני החדשה — מחליפה את Servicenow
+      </div>
+      <div class="dark-chips">
+        <span class="chip">פורטל שירות עצמי</span>
+        <span class="chip">ניהול קריאות</span>
+        <span class="chip">אשף הבקשות</span>
+      </div>
+    </div>
+    <div class="dark-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       שקף 2 — קונטקסט (Light + Screenshot)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-light" id="s2">
+    <div class="light-top">
+      <div class="section-tag">הקונטקסט</div>
+      <div class="light-title">
+        <span class="hl">Helix-ITSM</span> — מה ולמה?
+      </div>
+      <div class="light-subtitle">הפלטפורמה החדשה לניהול שירות IT — כבר פועלת אצלנו</div>
+    </div>
+    <div class="light-divider"></div>
+    <div class="split-body">
+      <div class="split-text">
+        <div class="bullet">
+          <div class="bullet-label">חלק ממשפחה שכבר מוכרת</div>
+          <div class="bullet-body">
+            Helix-ITSM היא המערכת השלישית מבית BMC Helix — לצד Helix-AIOps
+            ו-Control-M שכבר עובדים אצלנו. שלוש מערכות, יצרן אחד, שפה אחת.
+          </div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-label">מה היא מחליפה?</div>
+          <div class="bullet-body">
+            את Servicenow — המוכרת לנו בשם On-It. שם המערכת הארגונית
+            נשאר <strong>On-It</strong>, אבל מה שמאחורי הכפתור — חדש לגמרי.
+          </div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-label">מה מחכה לנו?</div>
+          <div class="bullet-body">
+            ממשק תומך פשוט ונוח לתפעול, פורטל שירות עצמי חדש, ותהליכי עבודה
+            מסודרים יותר — עם חיפוש חכם, טפסים ברורים ותצוגה מאוחדת לכל סוגי הקריאות.
+          </div>
+        </div>
+      </div>
+      <div class="split-image-col">
+        <div class="screen-wrap">
+          <div class="screen-bar">
+            <div class="screen-dot"></div>
+            <div class="screen-dot"></div>
+            <div class="screen-dot"></div>
+            <div class="screen-bar-text">On-IT | BMC Helix ITSM</div>
+          </div>
+          <img class="screen-img" src="design/ITSM/selfservice1.jpg" alt="פורטל השירות העצמי" />
+        </div>
+        <div class="screen-caption">פורטל השירות העצמי</div>
+      </div>
+    </div>
+    <div class="light-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       שקף 3 — סדר יום (Dark A, numbered)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s3">
+    <div class="dark-logo">
+      <div class="dark-logo-main">BMC Helix-ITSM</div>
+      <div class="dark-logo-sub">מבוא להדרכה</div>
+    </div>
+    <div class="dark-body">
+      <div class="dark-pretitle">מה עושים היום?</div>
+      <div class="dark-title">
+        <span class="em">5 תחנות</span>
+        <span style="font-size:clamp(20px,2.4vw,34px); font-weight:300;">הרבה תרגול — מעט תיאוריה</span>
+      </div>
+      <div class="accent-bar"></div>
+      <div class="action-list">
+        <div class="action-item">
+          <div class="action-num">1</div>
+          <div class="action-text">
+            <strong>פורטל שירות עצמי</strong> — נהיה הלקוח ונתנסה בפתיחת קריאות
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">2</div>
+          <div class="action-text">
+            <strong>ממשק התומך</strong> — נכיר את המסכים, התצוגות ואזורי העבודה
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">3</div>
+          <div class="action-text">
+            <strong>עדכון קריאות</strong> — נלמד לעדכן תקלות ובקשות (Work Order)
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">4</div>
+          <div class="action-text">
+            <strong>אשף הבקשות</strong> — הכלי החכם לפתיחת בקשות שירות
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-num">5</div>
+          <div class="action-text">
+            <strong>שינויים</strong> — נלמד איך פותחים Change Request במערכת
+          </div>
+        </div>
+      </div>
+      <div class="dark-note" style="font-size: clamp(14px,1.35vw,19px); font-weight: 600;">
+        והכי חשוב — נשחק עם המערכת ונדווח על מה שלא עובד כמצופה
+      </div>
+    </div>
+    <div class="dark-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       שקף 4 — יתרונות (Light + Screenshot)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-light" id="s4">
+    <div class="light-top">
+      <div class="section-tag">למה זה טוב?</div>
+      <div class="light-title">יתרונות <span class="hl">Helix-ITSM</span></div>
+      <div class="light-subtitle">שיפורים מהותיים לעומת הממשק הקודם</div>
+    </div>
+    <div class="light-divider"></div>
+    <div class="split-body">
+      <div class="split-text">
+        <div class="bullet">
+          <div class="bullet-label">ממשק פשוט ונקי</div>
+          <div class="bullet-body">
+            תקלות, בקשות ושינויים — הכל במקום אחד, באותה שפה ובאותו פורמט עבודה
+          </div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-label">איתור סיווגים חכם</div>
+          <div class="bullet-body">
+            חיפוש סיווג ("שלשה") לפי מילה אחת
+          </div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-label">אשף הבקשות</div>
+          <div class="bullet-body">
+            מוביל שלב אחר שלב לפתיחת הבקשה הנכונה — גם מי שלא מכיר את הטופס, ימצא אותו
+          </div>
+        </div>
+        <div class="bullet">
+          <div class="bullet-label">תצוגה מאוחדת</div>
+          <div class="bullet-body">
+            עברית מלאה, טפסים ברורים, חיפוש מהיר — פחות זמן על המערכת, יותר זמן על הבעיה
+          </div>
+        </div>
+      </div>
+      <div class="split-image-col">
+        <div class="screen-wrap">
+          <div class="screen-bar">
+            <div class="screen-dot"></div>
+            <div class="screen-dot"></div>
+            <div class="screen-dot"></div>
+            <div class="screen-bar-text">Smart IT | BMC Helix ITSM</div>
+          </div>
+          <img class="screen-img" src="design/ITSM/SmartIT.png" alt="ממשק ניהול קריאות" />
+        </div>
+        <div class="screen-caption">ממשק ניהול קריאות — Smart IT</div>
+      </div>
+    </div>
+    <div class="light-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       שקף 5 — חשוב לדעת (Dark A, dots)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s5">
+    <div class="dark-logo">
+      <div class="dark-logo-main">BMC Helix-ITSM</div>
+      <div class="dark-logo-sub">מבוא להדרכה</div>
+    </div>
+    <div class="dark-body">
+      <div class="dark-pretitle">לפני שמתחילים</div>
+      <div class="dark-title">
+        <span class="em">כמה דברים חשובים</span>
+      </div>
+      <div class="accent-bar"></div>
+      <div class="action-list">
+        <div class="action-item">
+          <div class="action-dot"></div>
+          <div class="action-text">
+            שם המערכת נשאר <strong>On-It</strong> — ממשק חדש, אותו קישור מפורטל עובדים. אין צורך לשנות הרגלים
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-dot"></div>
+          <div class="action-text">
+            גישה ל-Servicenow <strong>נחסמת ב-17.5.26</strong> — קריאות פתוחות יעברו, ארכיון יהיה זמין בהמשך
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-dot"></div>
+          <div class="action-text">
+            קריאות שהועברו מ-Servicenow עשויות לדרוש <strong>השלמת נתונים</strong> — סיווגים, קישורי Jira ועוד
+          </div>
+        </div>
+        <div class="action-item">
+          <div class="action-dot"></div>
+          <div class="action-text">
+            נתקלתם בתקלה? קודם — <strong>ריפרש</strong> — עדיין לא תקין?
+            פיתחו <strong>"תקלת Helix-ITSM"</strong> בפורטל השירות העצמי
+          </div>
+        </div>
+      </div>
+      <div class="phase-row">
+        <div class="phase-label">לא יעלו בשלב א' — בפיתוח:</div>
+        <div class="dark-chips" style="margin-top: 0;">
+          <span class="chip">קטלוג מערכות IT</span>
+          <span class="chip">דשבורדים ניהוליים</span>
+          <span class="chip">דיווחי הפסקות שירות</span>
+          <span class="chip">אפליקציה לנייד</span>
+        </div>
+      </div>
+    </div>
+    <div class="dark-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+  <!-- ══════════════════════════════════════
+       שקף 6 — נתחיל (Dark A)
+  ══════════════════════════════════════ -->
+  <div class="slide slide-dark" id="s6">
+    <div class="dark-logo">
+      <div class="dark-logo-main">BMC Helix-ITSM</div>
+      <div class="dark-logo-sub">מבוא להדרכה</div>
+    </div>
+    <div class="dark-body" style="align-items: flex-start;">
+      <div class="dark-pretitle">מוכנים?</div>
+      <div class="dark-title">
+        <span style="font-weight:300;">בואו</span>
+        <span class="em">נתחיל</span>
+      </div>
+      <div class="accent-bar"></div>
+      <div class="dark-subtitle">
+        נפתח את פורטל השירות העצמי ונתחיל לתרגל מנקודת מבט הלקוח
+      </div>
+      <div class="dark-chips" style="margin-top: 28px;">
+        <span class="chip">שאלות? עצרו אותי בכל שלב</span>
+        <span class="chip">הדרכות נוספות יעלו בהמשך</span>
+      </div>
+    </div>
+    <div class="dark-footer"><span class="footer-name">אלעד לוי</span></div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- Navigation -->
+<div id="dots">
+  <button class="dot on"  onclick="go(1)"></button>
+  <button class="dot"     onclick="go(2)"></button>
+  <button class="dot"     onclick="go(3)"></button>
+  <button class="dot"     onclick="go(4)"></button>
+  <button class="dot"     onclick="go(5)"></button>
+  <button class="dot"     onclick="go(6)"></button>
+</div>
+<button class="nav-arrow" id="btn-next" onclick="next()">&#8249;</button>
+<button class="nav-arrow" id="btn-prev" onclick="prev()">&#8250;</button>
+<div id="counter">1 / 6</div>
+
+<script>
+let cur = 1;
+const TOTAL = 6;
+function go(n) {
+  if (n < 1 || n > TOTAL || n === cur) return;
+  document.getElementById('s' + cur).classList.remove('active');
+  cur = n;
+  document.getElementById('s' + cur).classList.add('active');
+  document.getElementById('counter').textContent = cur + ' / ' + TOTAL;
+  document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('on', i === cur - 1));
+  document.getElementById('btn-prev').style.opacity = cur === 1     ? '0.3' : '1';
+  document.getElementById('btn-next').style.opacity = cur === TOTAL ? '0.3' : '1';
+}
+function next() { go(cur + 1); }
+function prev() { go(cur - 1); }
+document.addEventListener('keydown', e => {
+  if      (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); prev(); }
+});
+let tx = 0;
+document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) { dx > 0 ? next() : prev(); }
+});
+go(1);
+</script>
+</body>
+</html>
