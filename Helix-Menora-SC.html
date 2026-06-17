@@ -51,7 +51,8 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
 .dark-logo-sub  { font-size: 11px; font-weight: 300; color: rgba(255,255,255,.38); letter-spacing: .5px; }
 .dark-body {
   flex: 1; display: flex; flex-direction: column; justify-content: center;
-  padding: 0 clamp(52px,7vw,120px) 52px; position: relative; z-index: 1;
+  padding: 0 clamp(52px,7vw,120px) 60px; position: relative; z-index: 1;
+  overflow: hidden; min-height: 0;
 }
 .dark-title { font-size: clamp(30px,4vw,58px); line-height: 1.18; font-weight: 300; color: var(--white); }
 .dark-title .em { display: block; font-weight: 900; color: var(--yellow); font-size: clamp(38px,5vw,72px); }
@@ -89,14 +90,15 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
 /* ── TYPE B — LIGHT BULLETS ── */
 .slide-light { background: var(--white); }
 .slide-light::after { content: ''; position: absolute; top: 0; bottom: 0; right: 0; width: var(--stripe); background: var(--yellow); }
-.light-top { padding: clamp(24px,3.5vh,48px) clamp(36px,5vw,80px) 0; padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px); }
+.light-top { padding: clamp(24px,3.5vh,48px) clamp(36px,5vw,80px) 0; padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px); text-align: right; }
 .section-tag { display: inline-block; font-size: clamp(11px,.9vw,13px); font-weight: 700; color: var(--yellow); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 8px; }
 .light-title { font-size: clamp(26px,3.2vw,46px); font-weight: 800; color: var(--yellow); line-height: 1.15; margin-bottom: 7px; }
 .light-subtitle { font-size: clamp(14px,1.5vw,20px); font-weight: 500; color: var(--muted); line-height: 1.4; }
 .light-divider { height: 1px; background: var(--border); margin: clamp(14px,2.2vh,26px) 0; margin-right: calc(var(--stripe) + 14px); }
 .light-content {
   flex: 1; display: flex; flex-direction: column; gap: clamp(14px,2vh,26px);
-  padding: 0 clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px); overflow: hidden;
+  padding: 0 clamp(36px,5vw,80px); padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 14px);
+  overflow: hidden; min-height: 0;
 }
 .bullet { display: flex; flex-direction: column; gap: 6px; padding-right: 28px; position: relative; }
 .bullet::before { content: ''; position: absolute; right: 0; top: 9px; width: 14px; height: 14px; border-radius: 50%; background: var(--yellow); }
@@ -129,7 +131,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
   gap: clamp(12px,1.8vw,22px);
   padding: clamp(18px,2.6vh,30px) clamp(36px,5vw,80px);
   padding-right: calc(clamp(36px,5vw,80px) + var(--stripe) + 6px);
-  align-items: start;
+  align-items: start; overflow: hidden; min-height: 0;
 }
 .cards-grid-4 { grid-template-columns: repeat(2,1fr); }
 .card {
@@ -224,7 +226,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
 
 /* ── NAVIGATION ── */
 #counter { position: fixed; top: 18px; left: 22px; font-size: 12px; font-weight: 500; direction: ltr; color: rgba(255,255,255,.5); letter-spacing: .5px; z-index: 200; pointer-events: none; }
-#dots { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; align-items: center; z-index: 200; }
+#dots { position: fixed; bottom: 62px; left: 50%; transform: translateX(-50%); display: flex; gap: 7px; align-items: center; z-index: 200; }
 .dot { width: 8px; height: 8px; border-radius: 4px; background: rgba(255,255,255,.3); cursor: pointer; transition: width .3s ease, background .3s ease; border: none; padding: 0; }
 .dot.on { width: 26px; background: var(--yellow); }
 .nav-arrow {
@@ -417,8 +419,8 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <th>נושא</th>
           <th>חומרה</th>
           <th>ימים</th>
-          <th>חוסם</th>
-          <th>מצב נוכחי</th>
+          <th>השלכה עסקית</th>
+          <th>מצב</th>
         </tr>
       </thead>
       <tbody>
@@ -427,7 +429,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>ממשק מעורב עברית/אנגלית — Smart IT</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age age-d">34</span></td>
-          <td class="blk-y">✓</td>
+          <td>ממשק לא שמיש — חסימת עבודה יומית</td>
           <td>Workaround — פתרון קבוע בבדיקה</td>
         </tr>
         <tr>
@@ -435,7 +437,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>Bulk Assignment — DWP / SmartIT</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age age-d">30</span></td>
-          <td class="blk-y">✓</td>
+          <td>ניתוב קריאות — תהליך ידני במקום אוטומטי</td>
           <td>BMC R&D בחקירה</td>
         </tr>
         <tr>
@@ -443,7 +445,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>בקשות שלא תועדו — Webservice</td>
           <td><span class="sev sev-m">Medium</span></td>
           <td><span class="age age-w">21</span></td>
-          <td class="blk-n">—</td>
+          <td>קריאות ממשק ייתכן ולא נרשמות</td>
           <td>BMC בוחנת logging נוסף</td>
         </tr>
         <tr>
@@ -451,7 +453,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>מידע Resolution חסר — DWP Notifications</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age age-w">15</span></td>
-          <td class="blk-y">✓</td>
+          <td>לקוחות לא מקבלים עדכוני פתרון</td>
           <td>ממתין לקידום לייצור</td>
         </tr>
         <tr class="row-crit">
@@ -459,23 +461,23 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td><strong>ביצועים / גישה ל-Smart IT</strong></td>
           <td><span class="sev sev-c">Critical</span></td>
           <td><span class="age age-w">14</span></td>
-          <td class="blk-y">✓</td>
-          <td>בחקירה משותפת — ראה שקף 5</td>
+          <td><strong>עצירת עבודה — גישה ל-Smart IT</strong></td>
+          <td>חקירה משותפת — ראה שקף 5</td>
         </tr>
         <tr>
           <td class="case-num">2136541</td>
           <td>שגיאת Jira Create Issue</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age age-w">13</span></td>
-          <td class="blk-y">✓</td>
-          <td>BMC העבירה פתרון — ממתין לאישור</td>
+          <td>שיבוש יצירת קריאות מ-Jira</td>
+          <td>BMC פתרון — ממתין לאישור</td>
         </tr>
         <tr>
           <td class="case-num">2137048</td>
           <td>סינון Full Name — Ticket Console</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age age-w">12</span></td>
-          <td class="blk-y">✓</td>
+          <td>קושי בחיפוש קריאות לפי לקוח</td>
           <td>פתרון סופק — Matrix מאמתת</td>
         </tr>
         <tr>
@@ -483,15 +485,15 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>Status Reasons — TicketConsole / PWA</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age">9</span></td>
-          <td class="blk-y">✓</td>
-          <td>שחזור בסביבת Dev — בבדיקה</td>
+          <td>סיווג קריאות שגוי — TicketConsole</td>
+          <td>שחזור בסביבת Dev</td>
         </tr>
         <tr>
           <td class="case-num">02137816</td>
           <td>תוויות עברית — Ticket Console</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age">9</span></td>
-          <td class="blk-y">✓</td>
+          <td>חיפוש בעברית לא פועל</td>
           <td>BMC ממשיכה לחקור</td>
         </tr>
         <tr>
@@ -499,7 +501,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>Infinite Session — דשבורדי Helix</td>
           <td><span class="sev sev-m">Medium</span></td>
           <td><span class="age">8</span></td>
-          <td class="blk-n">—</td>
+          <td>דשבורדים ניהוליים — Session לא יציב</td>
           <td>ממתין לאימות Matrix</td>
         </tr>
         <tr>
@@ -507,15 +509,15 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>מיילים לא נשלחים — WO Assignees</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age">6</span></td>
-          <td class="blk-y">✓</td>
-          <td>BMC מפעילה R&D</td>
+          <td>לא נשלחות הודעות על Work Orders</td>
+          <td>BMC R&D בחקירה</td>
         </tr>
         <tr>
           <td class="case-num">02139637</td>
           <td>שחיתות HTML — תבניות מייל</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age">6</span></td>
-          <td class="blk-y">✓</td>
+          <td>מיילים עם HTML גולמי — לקוחות מקבלים שגיאות</td>
           <td>BMC: Dev fix בעבודה</td>
         </tr>
         <tr>
@@ -523,7 +525,7 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
           <td>Status Reason — דפדפן עברית</td>
           <td><span class="sev sev-h">High</span></td>
           <td><span class="age">6</span></td>
-          <td class="blk-y">✓</td>
+          <td>שגיאת עברית ב-Status Reason</td>
           <td>פתרון זוהה — ממתין ל-Matrix</td>
         </tr>
       </tbody>
@@ -561,13 +563,6 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
       <div class="bullet-body">
         Shridhar Joshi (OnBoarding Support Manager) — עדכון פעמיים בשבוע (ראשון/חמישי)<br>
         <strong>אין ETA לפתרון כרגע</strong>
-      </div>
-    </div>
-    <div class="bullet">
-      <div class="bullet-label">הציפייה מהפגישה</div>
-      <div class="bullet-body">
-        מנורה השקיעה משאבים לפי בקשת BMC ושללה את גורם הרשת.<br>
-        <strong>נדרש ETA ברור מ-BMC עד הפגישה הבאה</strong>
       </div>
     </div>
   </div>
@@ -677,58 +672,53 @@ body { font-family: 'Heebo', sans-serif; direction: rtl; background: #1c1c2e; }
 </div>
 
 <!-- ════════════════════════════════
-     שקף 8 — פערי תכולה שלב א' (Cards)
+     שקף 8 — תכולות שטרם עלו לאוויר (Cards)
 ════════════════════════════════ -->
 <div class="slide slide-cards" id="s8">
   <div class="cards-header">
-    <div class="cards-header-title">פערי תכולה משלב א' — בסיס לתכנון שלב ב'</div>
-    <div class="cards-header-subtitle">תכולות שנדונו לשלב א' ולא עלו לאוויר · 35+ פריטים בסה"כ</div>
+    <div class="cards-header-title">תכולות שטרם עלו לאוויר — 16 פריטים לתכנון שלב ב'</div>
+    <div class="cards-header-subtitle">תכולות שנדונו ולא הושלמו · בסיס לדיון על היקף, לוח זמנים ותמחור</div>
   </div>
   <div class="cards-grid">
 
-    <div class="card green">
-      <div class="card-icon">🖥️</div>
-      <div class="card-title">מחלקת IT ומוקד שירות</div>
-      <div class="card-items">
-        <div class="card-item">SLA/OLA — הגדרות חלקיות</div>
-        <div class="card-item">ניטור אבטחה — Qradar</div>
-        <div class="card-item">ניהול תקלות מורחב (Change Management)</div>
-        <div class="card-item">ניטור K8S</div>
-        <div class="card-item">דוחות מתקדמים</div>
-        <div class="card-item">ניהול Outage</div>
-      </div>
-      <div class="card-badge green">~15 פריטים</div>
-    </div>
-
     <div class="card orange">
-      <div class="card-icon">🛠️</div>
-      <div class="card-title">מרכז שירות ותפעול</div>
+      <div class="card-icon">⚙️</div>
+      <div class="card-title">תהליכים ותפעול</div>
       <div class="card-items">
-        <div class="card-item">OLA — ניהול ספקים</div>
-        <div class="card-item">Jira — תכולות מלאות (לא רק חיבור)</div>
-        <div class="card-item">ניהול תשתיות (ITOM / CMDB)</div>
-        <div class="card-item">ניהול Outage</div>
-        <div class="card-item">תהליך פתיחה מחדש (Reopen)</div>
+        <div class="card-item"><strong>בקשות שינוי, שירות ותקלות</strong> — שינוי ידני · שירות · תקלה מערכתית · תקלות</div>
+        <div class="card-item"><strong>HELIX התראות מייל</strong> — הודעות ועיצוב מיילים</div>
+        <div class="card-item"><strong>מודול ניהול הידע</strong></div>
+        <div class="card-item"><strong>דוחות ודשבורדים</strong> — דשבורדים ניהוליים</div>
       </div>
-      <div class="card-badge orange">~12 פריטים</div>
+      <div class="card-badge orange">7 פריטים</div>
     </div>
 
     <div class="card red">
-      <div class="card-icon">🛡️</div>
-      <div class="card-title">תשתיות ואבטחת מידע</div>
+      <div class="card-icon">🔗</div>
+      <div class="card-title">ממשקים ואינטגרציות</div>
       <div class="card-items">
-        <div class="card-item">OLA — ניהול ספקים</div>
-        <div class="card-item">Control-M — 5 תכולות CMDB</div>
-        <div class="card-item">BigFix — CMDB</div>
-        <div class="card-item">סוגי קריאות</div>
+        <div class="card-item"><strong>ממשקים</strong> — Jira · SAP HR</div>
+        <div class="card-item"><strong>SmartIT</strong> — ממשק עבודה לנותני השירות</div>
+        <div class="card-item"><strong>ניהול משתמשים</strong> — הרשאות ותפקידים · ממשק ל-Business Unit</div>
       </div>
-      <div class="card-badge red">~8 פריטים</div>
+      <div class="card-badge red">5 פריטים</div>
+    </div>
+
+    <div class="card yellow">
+      <div class="card-icon">🗂️</div>
+      <div class="card-title">תשתיות וניהול מערכת</div>
+      <div class="card-items">
+        <div class="card-item"><strong>ניהול נכסים CMDB</strong> — נייחים וציוד קצה · שרתים ופודים (K8S)</div>
+        <div class="card-item"><strong>הקמת תשתית</strong> — הקמת סביבות</div>
+        <div class="card-item"><strong>עלייה לאוויר</strong> — שכפול סביבת QA לייצור</div>
+      </div>
+      <div class="card-badge yellow">4 פריטים</div>
     </div>
 
   </div>
   <div class="scope-note">
-    <span>פריטים שהיו בהיקף ולא בוצעו</span> — בירור אחריות חוזית; ציפייה: מימוש ללא עלות נוספת &nbsp;|&nbsp;
-    <span>פריטים שלא היו בהסכם</span> — תמחור ותכנון כחלק מהיקף שלב ב'
+    <span>הגדרת אחריות לכל פריט</span> — חוזית (מימוש ללא עלות נוספת) מול היקף חדש לשלב ב' &nbsp;·&nbsp;
+    <span>לדיון בפגישה</span>: תכולה, לוח זמנים ותמחור
   </div>
   <div class="cards-footer"><span class="footer-name">אלעד לוי · מנהל ITSM</span></div>
 </div>
